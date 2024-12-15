@@ -1,4 +1,4 @@
-name: Deploy Application
+name: Deploy to EC2
 
 on:
   push:
@@ -8,18 +8,41 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+      # Paso 1: Checkout del código
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '14'
+      # Paso 2: Configurar la clave SSH
+      - name: Set up SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.DESAFIO_M5_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
 
-      - name: Install dependencies
-        run: npm install
+      # Paso 3: Configurar el archivo known_hosts
+      - name: Add EC2 to known_hosts
+        run: ssh-keyscan -H 54.224.58.127 >> ~/.ssh/known_hosts
 
-      - name: Deploy application
-        run: npm run deploy
+      # Paso 4: Clonar el repositorio en la instancia EC2
+      - name: Clone repository on EC2
+        run: |
+          ssh -i ~/.ssh/id_rsa ec2-user@54.224.58.127 "
+          git clone https://github.com/antoruizx/desafio-1-m5.git /home/ec2-user/app || (cd /home/ec2-user/app && git pull)"
+
+      # Paso 5: Instalar dependencias necesarias
+      - name: Install dependencies on EC2
+        run: |
+          ssh -i ~/.ssh/id_rsa ec2-user@54.224.58.127 "
+          cd /home/ec2-user/app && 
+          sudo yum update -y &&
+          curl -fsSL https://rpm.nodesource.com/setup_16.x | sudo bash - &&
+          sudo yum install -y nodejs &&
+          npm install"
+
+      # Paso 6: Iniciar la aplicación en EC2
+      - name: Start application
+        run: |
+          ssh -i ~/.ssh/id_rsa ec2-user@54.224.58.127 "
+          cd /home/ec2-user/app && 
+          nohup npm start > app.log 2>&1 &"
