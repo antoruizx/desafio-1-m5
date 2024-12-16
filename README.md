@@ -6,18 +6,18 @@ Pasos realizados:
 Repositorio: utilicé el repositorio desafio-1-m5 para almacenar la aplicación web. Es una aplicación simple de Node.js.
 Workflow de GitHub Actions: Configuré un archivo de workflow en la ruta .github/workflows/deploy.yml. Este archivo contiene los pasos necesarios para realizar el despliegue automático de la aplicación web en la instancia EC2.
 
-3. Instancia EC2
+2. Instancia EC2
 Lanzamiento de la instancia EC2: creé una instancia EC2 en AWS con las siguientes características:
 Tipo: t2.micro (Free Tier).
 Sistema operativo: Amazon Linux 2.
 Seguridad: configuré un grupo de seguridad que permitiera el tráfico a través de los puertos 22 (SSH) y 80 (HTTP) para acceder a la instancia de manera remota y permití la visualización de la aplicación.
 Dirección IP pública: La dirección IP pública de la instancia EC2 es 54.224.58.127.
 
-5. Acceso Seguro a la Instancia
+3. Acceso Seguro a la Instancia
 Generación del par de claves SSH: generé un par de claves SSH para acceder de manera segura a la instancia EC2. La clave privada fue guardada como un secreto en GitHub.
 Almacenamiento de la clave privada en GitHub Secrets: almacené la clave privada SSH como un secreto llamado DESAFIO_M5_KEY en los GitHub Secrets.
 
-7. Despliegue Automatizado con GitHub Actions
+4. Despliegue Automatizado con GitHub Actions
 Creación del archivo de workflow: el archivo .github/workflows/deploy.yml contiene un flujo de trabajo automatizado para realizar el despliegue.
 
 Workflow
