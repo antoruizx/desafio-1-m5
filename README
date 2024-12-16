@@ -1,0 +1,33 @@
+Configuración de GitHub Actions para Despliegues en EC2 
+En este desafío, implementé un flujo de trabajo automatizado (CI/CD) utilizando GitHub Actions para desplegar una aplicación web sencilla en una instancia EC2 de Amazon Web Services (AWS). El objetivo fue integrar GitHub Actions con EC2, automatizando el despliegue de la aplicación a través de un proceso sin intervención manual.
+
+Pasos realizados
+
+Repositorio en GitHub Repositorio: utilicé el repositorio desafio-1-m5 para almacenar la aplicación web. Es una aplicación simple de Node.js.
+Workflow de GitHub Actions: Configuré un archivo de workflow en la ruta .github/workflows/deploy.yml. Este archivo contiene los pasos necesarios para realizar el despliegue automático de la aplicación web en la instancia EC2.
+
+Instancia EC2 
+
+1. Lanzamiento de la instancia EC2: creé una instancia EC2 en AWS con las siguientes características: 
+Tipo: t2.micro (Free Tier). 
+Sistema operativo: Amazon Linux 
+2. Seguridad: configuré un grupo de seguridad que permitiera el tráfico a través de los puertos 22 (SSH) y 80 (HTTP) para acceder a la instancia de manera remota y permití la visualización de la aplicación. 
+Dirección IP pública: La dirección IP pública de la instancia EC2 es 54.224.58.127.
+3. Acceso seguro a la Instancia:
+Generación del par de claves SSH: generé un par de claves SSH para acceder de manera segura a la instancia EC2. La clave privada fue guardada como un secreto en GitHub. 
+Almacenamiento de la clave privada en GitHub Secrets: almacené la clave privada SSH como un secreto llamado DESAFIO_M5_KEY en los GitHub Secrets.
+4. Despliegue Automatizado con GitHub Actions: creé el archivo .github/workflows/deploy.yml que contiene un flujo de trabajo automatizado para realizar el despliegue.
+
+Workflow
+
+Paso a paso del workflow: 
+1. Clonación del repositorio: utilicé actions/checkout para clonar el código fuente del repositorio. 
+2. Configuración de la clave SSH: usé el secreto DESAFIO_M5_KEY para configurar la clave SSH y permitir la conexión a la instancia EC2. 
+3. Despliegue a la instancia EC2: utilicé ssh para copiar los archivos del repositorio al servidor EC2 y ejecutar los comandos necesarios.
+
+Fallas Encontradas
+
+Durante el proceso, encontré un error relacionado con el acceso a la clave secreta almacenada en GitHub Secrets. El error fue: "Context access might be invalid". Este error ocurrió porque GitHub Actions no pudo acceder correctamente a la clave secreta.
+Verifiqué que el secreto estuviera correctamente almacenado en la sección Settings > Secrets and variables > Actions de mi repositorio de GitHub. 
+Me aseguré de que no hubiera errores de formato en la clave al almacenarla y usarla en el workflow. Implementé un paso de debug en el flujo de trabajo para verificar el acceso al secreto y asegurarse de que GitHub Actions pueda leerlo correctamente. 
+A pesar de los intentos, el error persisti y algunas configuraciones que no se reflejaron correctamente. Estaré atenta al feedback y poder solucionar este ultimo paso :)
